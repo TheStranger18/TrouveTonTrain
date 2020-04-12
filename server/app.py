@@ -3,9 +3,11 @@ from flask_spyne import Spyne
 from spyne.protocol.soap import Soap11
 from spyne.model.primitive import Unicode, Integer
 from spyne.model.complex import Iterable
+from flask_cors import CORS
 
 app = Flask(__name__)
 spyne = Spyne(app)
+CORS(app)
 
 class SomeSoapService(spyne.Service):
     __service_url_path__ = '/soap/someservice'
