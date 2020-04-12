@@ -4,8 +4,8 @@ export default {
 }
 
 var soap = require('soap');
-var url = 'localhost:5000/soap/someservice?wsdl';
-var args = {name: 'value'};
+var url = 'http://localhost:5000/soap/someservice?wsdl';
+var args = {name: 'echo'};
 soap.createClientAsync(url).then((client) => {
   return client.MyFunctionAsync(args);
 }).then((result) => {
