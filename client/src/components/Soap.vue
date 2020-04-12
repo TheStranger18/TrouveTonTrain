@@ -2,6 +2,15 @@
 export default {
   name: 'SOAP',
 }
+
+var soap = require('soap');
+var url = 'localhost:5000/soap/someservice?wsdl';
+var args = {name: 'value'};
+soap.createClientAsync(url).then((client) => {
+  return client.MyFunctionAsync(args);
+}).then((result) => {
+  console.log(result);
+});
 </script>
 <template>
   <form @submit.prevent="submitForm">
