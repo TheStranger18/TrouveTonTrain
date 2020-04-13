@@ -1,8 +1,8 @@
-import HelloWorld from "./components/HelloWorld.vue";
+import HelloPage from "./components/HomePage.vue";
 import Soap from "./components/Soap.vue";
 
 const routes = [
-    { path: "/", component: HelloWorld },
+    { path: "/", component: HomePage },
     { path: "/soap", component: Soap }
 ];
 
