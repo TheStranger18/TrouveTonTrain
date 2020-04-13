@@ -1,4 +1,4 @@
-import HelloPage from "./components/HomePage.vue";
+import HomePage from "./components/HomePage.vue";
 import Soap from "./components/Soap.vue";
 
 const routes = [
