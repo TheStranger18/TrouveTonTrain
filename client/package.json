@@ -11,8 +11,8 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "soap": "^0.31.0",
+    "v-suggestions": "^1.1.1",
     "vue": "^2.6.11",
-    "vue-autosuggest": "^2.1.1",
     "vue-router": "^3.1.6"
   },
   "devDependencies": {

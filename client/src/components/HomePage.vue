@@ -1,36 +1,23 @@
 <template>
-  <div class="hello">
-   <div v-if="selected">
-      You have selected <code>{{selected}}</code>
-    </div>
-    <div>
-      <vue-autosuggest
-        v-model="query"
-        :suggestions="filteredOptions"
-        @focus="focusMe"
-        @click="clickHandler"
-        @input="onInputChange"
-        @selected="onSelected"
-        :get-suggestion-value="getSuggestionValue"
-        :input-props="{id:'autosuggest__input', placeholder:'Do you feel lucky, punk?'}">
-        <div v-if="query">
-          <ul>
-            <li v-for="suggestion in suggestions" :key="suggestion.name">
-              {{suggestion.name}}
-            </li>
-          </ul>
-        </div>
-      </vue-autosuggest>
-    </div>
-  </div>
+<!--:suggestions="[{data:['Frodo', 'Samwise', 'Gandalf', 'Galadriel', 'Faramir', 'Éowyn']}]"-->
+  <div >
+    <suggestions
+    v-model="query"
+    :options="options"
+    :onInputChange="onCountryInputChange"></suggestions>
+
+</div>
 </template>
 
 <script>
 import Vue from 'vue'
 import axios from 'axios'
 import VueAutosuggest from "vue-autosuggest";
-
+import Suggestions from 'v-suggestions'
+import 'v-suggestions/dist/v-suggestions.css' // you can import the stylesheets also (optional)
+Vue.component('suggestions', Suggestions)
 Vue.use(VueAutosuggest);
+
 
 var temp = []
 
@@ -48,56 +35,31 @@ export default {
       } 
     })
   },
-
-  data() {
+  data () {
+    let countries=temp
+    //let countries = ['Afghanistan', 'Åland Islands', 'Albania', 'Algeria', 'American Samoa', 'AndorrA', 'Angola', 'Anguilla', 'Antarctica', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize']
     return {
-      query: "",
-      selected: "",
-      suggestions: [
-        
-          {name: "Hobbit"},
-           {name: "Samwise"},
-            {name: "Gandalf"},
-             {name: "Aragorn"}
-          
-        
-      ]
-    };
-  },
-  computed: {
-    filteredOptions() {
-      return [
-        { 
-          data: this.suggestions.filter(option => {
-            console.log("option="+option)
-            console.log("suggestions="+this.suggestions)
-            return option.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
-          })
-        }
-      ];
+      query: '',
+      countries: countries,
+      selectedCountry: null,
+      options: {}
     }
   },
   methods: {
-    clickHandler(item) {
-      // event fired when clicking on the input
-      console.log(item)
-
+    onCountryInputChange (query) {
+      if (query.trim().length === 0) {
+        return null
+      }
+      // return the matching countries as an array
+      return this.countries.filter((country) => {
+        return country.toLowerCase().includes(query.toLowerCase())
+      })
     },
-    onSelected(item) {
-      this.selected = item.item.name;
+    onCountrySelected (item) {
+      this.selectedCountry = item
     },
-    onInputChange(text) {
-      // event fired when the input changes
-      console.log(text)
-    },
-    /**
-     * This is what the <input/> value is set to when you are selecting a suggestion.
-     */
-    getSuggestionValue(suggestion) {
-      return suggestion;
-    },
-    focusMe(e) {
-      console.log(e) // FocusEvent
+    onSearchItemSelected (item) {
+      this.selectedSearchItem = item
     }
   }
 }
