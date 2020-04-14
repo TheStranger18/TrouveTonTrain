@@ -12,12 +12,10 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
-import VueAutosuggest from "vue-autosuggest";
 import Suggestions from 'v-suggestions'
 import 'v-suggestions/dist/v-suggestions.css' // you can import the stylesheets also (optional)
-Vue.component('suggestions', Suggestions)
-Vue.use(VueAutosuggest);
 
+Vue.component('suggestions', Suggestions)
 
 var temp = []
 
