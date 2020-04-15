@@ -5,7 +5,8 @@
     <suggestions
     v-model="departure"
     :options="options"
-    :onInputChange="onDepartureInputChange"></suggestions>
+    :onInputChange="onDepartureInputChange"
+    :onItemSelected="onDepartureSelected"></suggestions>
 
   <br>
   <br>
@@ -14,7 +15,8 @@
     <suggestions
     v-model="arrival"
     :options="options"
-    :onInputChange="onArrivalInputChange"></suggestions>
+    :onInputChange="onArrivalInputChange"
+    :onItemSelected="onArrivalSelected"></suggestions>
 </div>
 </template>
 
@@ -49,7 +51,8 @@ export default {
       departure: '',
       arrival: '',
       countries: countries,
-      selectedCountry: null,
+      selectedDeparture: null,
+      selectedArrival: null,
       options: {}
     }
   },
@@ -72,8 +75,15 @@ export default {
         return country.toLowerCase().includes(arrival.toLowerCase())
       })
     },
-    onCountrySelected (item) {
-      this.selectedCountry = item
+    onDepartureSelected (item) {
+      this.selectedDeparture = item
+      this.departure = item
+      console.log(this.selectedDeparture)
+    },
+    onArrivalSelected (item) {
+      this.selectedArrival = item
+      this.arrival = item
+      console.log(this.selectedArrival)
     },
     onSearchItemSelected (item) {
       this.selectedSearchItem = item
