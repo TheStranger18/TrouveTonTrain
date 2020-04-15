@@ -1,11 +1,20 @@
 <template>
 <!--:suggestions="[{data:['Frodo', 'Samwise', 'Gandalf', 'Galadriel', 'Faramir', 'Éowyn']}]"-->
   <div >
+    <h3>Departure :</h3>
     <suggestions
-    v-model="query"
+    v-model="departure"
     :options="options"
-    :onInputChange="onCountryInputChange"></suggestions>
+    :onInputChange="onDepartureInputChange"></suggestions>
 
+  <br>
+  <br>
+
+  <h3>Arrival :</h3>
+    <suggestions
+    v-model="arrival"
+    :options="options"
+    :onInputChange="onArrivalInputChange"></suggestions>
 </div>
 </template>
 
@@ -37,20 +46,30 @@ export default {
     let countries=temp
     //let countries = ['Afghanistan', 'Åland Islands', 'Albania', 'Algeria', 'American Samoa', 'AndorrA', 'Angola', 'Anguilla', 'Antarctica', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize']
     return {
-      query: '',
+      departure: '',
+      arrival: '',
       countries: countries,
       selectedCountry: null,
       options: {}
     }
   },
   methods: {
-    onCountryInputChange (query) {
-      if (query.trim().length === 0) {
+    onDepartureInputChange (departure) {
+      if (departure.trim().length === 0) {
         return null
       }
       // return the matching countries as an array
       return this.countries.filter((country) => {
-        return country.toLowerCase().includes(query.toLowerCase())
+        return country.toLowerCase().includes(departure.toLowerCase())
+      })
+    },
+    onArrivalInputChange (arrival) {
+      if (arrival.trim().length === 0) {
+        return null
+      }
+      // return the matching countries as an array
+      return this.countries.filter((country) => {
+        return country.toLowerCase().includes(arrival.toLowerCase())
       })
     },
     onCountrySelected (item) {
