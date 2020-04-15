@@ -1,5 +1,4 @@
 <template>
-<!--:suggestions="[{data:['Frodo', 'Samwise', 'Gandalf', 'Galadriel', 'Faramir', 'Éowyn']}]"-->
   <div >
     <h3>Departure :</h3>
     <suggestions
@@ -28,7 +27,35 @@ import 'v-suggestions/dist/v-suggestions.css' // you can import the stylesheets 
 
 Vue.component('suggestions', Suggestions)
 
-var temp = []
+var temp = [] // name of all cities that we receive from the sncf api
+var allInfomations = [] // all infomationsthat we receive from the sncf api
+var indexDeparture = 0
+var indexArrival = 0
+//var coorDeparture = new Map()
+//var coorArrival = new Map()
+var latitudeD = 0
+var longitudeD = 0
+var latitudeA = 0
+var longitudeA = 0
+
+// this function permit us to know the index for the cities
+function findCity(departure, arrival){
+  for(var i = 0; i<3270; i++){
+    if(departure===temp[i]){
+      indexDeparture = i
+    }
+    if(arrival===temp[i]){
+      indexArrival = i
+    }
+  }
+}
+
+function getCoor(indexDeparture, indexArrival){
+  latitudeD = allInfomations[indexDeparture].fields.pltf_latitude_entreeprincipale_wgs84
+  longitudeD = allInfomations[indexDeparture].fields.pltf_longitude_entreeprincipale_wgs84
+  latitudeA = allInfomations[indexArrival].fields.pltf_latitude_entreeprincipale_wgs84
+  longitudeA = allInfomations[indexArrival].fields.pltf_longitude_entreeprincipale_wgs84
+}
 
 export default {
   name: 'HelloWorld',
@@ -36,12 +63,14 @@ export default {
   axios.get('https://ressources.data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&rows=3270&sort=gare_alias_libelle_noncontraint&facet=gare_agencegc_libelle&facet=gare_regionsncf_libelle&facet=gare_ug_libelle&facet=pltf_departement_libellemin&facet=pltf_segmentdrg_libelle')
     .then(function (response) {
       // fields.gare_alias_libelle_noncontraint
-      //console.log(response.data.records)
+      console.log(response.data.records)
       var i = null
+      allInfomations = response.data.records
       for (i = 0; i < 3270; i++) {
         temp[i] = response.data.records[i].fields.gare_alias_libelle_noncontraint
         //console.log(temp[i])
-      } 
+      }
+      //console.log(allInfomations[0].fields.pltf_latitude_entreeprincipale_wgs84)
     })
   },
   data () {
@@ -57,6 +86,7 @@ export default {
     }
   },
   methods: {
+
     onDepartureInputChange (departure) {
       if (departure.trim().length === 0) {
         return null
@@ -78,12 +108,27 @@ export default {
     onDepartureSelected (item) {
       this.selectedDeparture = item
       this.departure = item
-      console.log(this.selectedDeparture)
+      if(this.selectedArrival != null){
+        findCity(this.departure, this.arrival)
+        getCoor(indexDeparture, indexArrival)
+        console.log(this.departure+" / "+this.arrival)
+        console.log(indexDeparture+" / "+indexArrival)
+        console.log(latitudeD+" / "+longitudeD)
+        console.log(latitudeA+" / "+longitudeA)
+      }
     },
     onArrivalSelected (item) {
       this.selectedArrival = item
       this.arrival = item
-      console.log(this.selectedArrival)
+      if(this.selectedDeparture != null){
+        console.log(allInfomations)
+        findCity(this.departure, this.arrival)
+        getCoor(indexDeparture, indexArrival)
+        console.log(this.departure+" / "+this.arrival)
+        console.log(indexDeparture+" / "+indexArrival)
+        console.log(latitudeD+" / "+longitudeD)
+        console.log(latitudeA+" / "+longitudeA)
+      }
     },
     onSearchItemSelected (item) {
       this.selectedSearchItem = item
