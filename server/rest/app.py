@@ -1,9 +1,11 @@
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
+from flask_cors import CORS
 import math
 
 app = Flask(__name__)
 api = Api(app)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 todos = {}
 
