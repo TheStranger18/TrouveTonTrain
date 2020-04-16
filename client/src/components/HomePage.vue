@@ -16,7 +16,10 @@
     :options="options"
     :onInputChange="onArrivalInputChange"
     :onItemSelected="onArrivalSelected"></suggestions>
+
+    <p v-if="ifDistance">La distance est de <span id="sum"></span> km.</p>
 </div>
+
 </template>
 
 <script>
@@ -37,6 +40,7 @@ var latitudeD = 0
 var longitudeD = 0
 var latitudeA = 0
 var longitudeA = 0
+var distance = null
 
 // this function permit us to know the index for the cities
 function findCity(departure, arrival){
@@ -50,11 +54,21 @@ function findCity(departure, arrival){
   }
 }
 
+// this function permit us to get the coor of the each city
 function getCoor(indexDeparture, indexArrival){
   latitudeD = allInfomations[indexDeparture].fields.pltf_latitude_entreeprincipale_wgs84
   longitudeD = allInfomations[indexDeparture].fields.pltf_longitude_entreeprincipale_wgs84
   latitudeA = allInfomations[indexArrival].fields.pltf_latitude_entreeprincipale_wgs84
   longitudeA = allInfomations[indexArrival].fields.pltf_longitude_entreeprincipale_wgs84
+}
+
+function getDistance(latitudeD, longitudeD, latitudeA, longitudeA){
+  axios.get('http://localhost:5000/calculdistance/'+latitudeD+'/'+longitudeD+'/'+latitudeA+'/'+longitudeA)
+    .then(function(response){
+      distance = response.data.distance
+      document.getElementById("sum").innerHTML=distance;
+      console.log(distance)
+    })
 }
 
 export default {
@@ -82,7 +96,8 @@ export default {
       countries: countries,
       selectedDeparture: null,
       selectedArrival: null,
-      options: {}
+      options: {},
+      ifDistance: false
     }
   },
   methods: {
@@ -111,10 +126,8 @@ export default {
       if(this.selectedArrival != null){
         findCity(this.departure, this.arrival)
         getCoor(indexDeparture, indexArrival)
-        console.log(this.departure+" / "+this.arrival)
-        console.log(indexDeparture+" / "+indexArrival)
-        console.log(latitudeD+" / "+longitudeD)
-        console.log(latitudeA+" / "+longitudeA)
+        getDistance(latitudeD, longitudeD, latitudeA, longitudeA)
+        this.ifDistance=true
       }
     },
     onArrivalSelected (item) {
@@ -124,10 +137,8 @@ export default {
         console.log(allInfomations)
         findCity(this.departure, this.arrival)
         getCoor(indexDeparture, indexArrival)
-        console.log(this.departure+" / "+this.arrival)
-        console.log(indexDeparture+" / "+indexArrival)
-        console.log(latitudeD+" / "+longitudeD)
-        console.log(latitudeA+" / "+longitudeA)
+        getDistance(latitudeD, longitudeD, latitudeA, longitudeA)
+        this.ifDistance=true
       }
     },
     onSearchItemSelected (item) {
