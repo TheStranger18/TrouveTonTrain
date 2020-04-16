@@ -7,16 +7,6 @@ app = Flask(__name__)
 api = Api(app)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-todos = {}
-
-
-class TodoSimple(Resource):
-    def get(self, todo_id):
-        return {todo_id: todos[todo_id]}
-
-    def put(self, todo_id):
-        todos[todo_id] = request.form['data']
-        return {todo_id: todos[todo_id]}
 
 class CalculDistance(Resource):
     def get(self, latitudeA, longitudeA, latitudeB, longitudeB):
@@ -32,8 +22,9 @@ class CalculDistance(Resource):
         return {'distance': round(result, 2)}
 
 
-api.add_resource(TodoSimple, '/<string:todo_id>')
+
 api.add_resource(CalculDistance, '/calculdistance/<float:latitudeA>/<float:longitudeA>/<float:latitudeB>/<float:longitudeB>')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
