@@ -21,10 +21,14 @@ class CalculDistance(Resource):
         result = result/1000
         return {'distance': round(result, 2)}
 
+class CalculPrice(Resource):
+    def get(self, distance):
+        total = distance*0.5
+        return {'price': total}
 
 
 api.add_resource(CalculDistance, '/calculdistance/<float:latitudeA>/<float:longitudeA>/<float:latitudeB>/<float:longitudeB>')
-
+api.add_resource(CalculPrice, '/calculprice/<float:distance>')
 
 if __name__ == '__main__':
     app.run(debug=True)
