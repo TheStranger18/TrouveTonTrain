@@ -17,7 +17,9 @@
     :onInputChange="onArrivalInputChange"
     :onItemSelected="onArrivalSelected"></suggestions>
 
-    <p v-if="ifDistance">La distance est de <span id="sum"></span> km.</p>
+    <p v-if="ifDistance">La distance est de <span id="sum"></span> km.<br>
+      Le prix de ce trajet est le suivant <span id="price"> euros.</span>  
+    </p>
 </div>
 
 </template>
@@ -41,6 +43,7 @@ var longitudeD = 0
 var latitudeA = 0
 var longitudeA = 0
 var distance = null
+var price = null
 
 // this function permit us to know the index for the cities
 function findCity(departure, arrival){
@@ -67,7 +70,11 @@ function getDistance(latitudeD, longitudeD, latitudeA, longitudeA){
     .then(function(response){
       distance = response.data.distance
       document.getElementById("sum").innerHTML=distance;
-      console.log(distance)
+      axios.get('http://localhost:5000/calculprice/'+distance)
+        .then(function(response){
+        price = response.data.price
+        document.getElementById("price").innerHTML=price;
+      })
     })
 }
 
