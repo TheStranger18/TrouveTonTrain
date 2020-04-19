@@ -18,7 +18,7 @@
     :onItemSelected="onArrivalSelected"></suggestions>
 
     <p v-if="ifDistance">La distance est de <span id="sum"></span> km.<br>
-      Le prix de ce trajet est le suivant <span id="price"> euros.</span>  
+      Le prix de ce trajet est le suivant <span id="price"> €.</span>  
     </p>
 </div>
 
@@ -32,6 +32,8 @@ import 'v-suggestions/dist/v-suggestions.css' // you can import the stylesheets 
 
 Vue.component('suggestions', Suggestions)
 
+//var url = 'http://localhost:5000'
+var url = 'https://tttserver.ew.r.appspot.com'
 var temp = [] // name of all cities that we receive from the sncf api
 var allInfomations = [] // all infomationsthat we receive from the sncf api
 var indexDeparture = 0
@@ -66,11 +68,11 @@ function getCoor(indexDeparture, indexArrival){
 }
 
 function getDistance(latitudeD, longitudeD, latitudeA, longitudeA){
-  axios.get('http://localhost:5000/calculdistance/'+latitudeD+'/'+longitudeD+'/'+latitudeA+'/'+longitudeA)
+  axios.get(url+'/calculdistance/'+latitudeD+'/'+longitudeD+'/'+latitudeA+'/'+longitudeA)
     .then(function(response){
       distance = response.data.distance
       document.getElementById("sum").innerHTML=distance;
-      axios.get('http://localhost:5000/calculprice/'+distance)
+      axios.get(url+'/calculprice/'+distance)
         .then(function(response){
         price = response.data.price
         document.getElementById("price").innerHTML=price;
