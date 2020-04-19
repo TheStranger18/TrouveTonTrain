@@ -18,7 +18,7 @@
     :onItemSelected="onArrivalSelected"></suggestions>
 
     <p v-if="ifDistance">La distance est de <span id="sum"></span> km.<br>
-      Le prix de ce trajet est le suivant <span id="price"> €.</span>  
+      Le prix de ce trajet est le suivant <span id="price"></span> €.  
     </p>
 </div>
 
